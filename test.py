@@ -1,14 +1,11 @@
-# import array as arr
-
 
 # Représentation possible du Teeko
 # Une matrice 5 * 5
 # Un double tableau 5 * 5
 
+# Liste 
 # w, h = 5, 5
 # Matrix = [[0 for x in range(w)] for y in range(h)] 
-
-
 
 # i = 0
 # j = 0
@@ -18,6 +15,7 @@
 #     ++i
 
 
+# Tableau à 2 dimensions
 import numpy as np
 
 arr = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
