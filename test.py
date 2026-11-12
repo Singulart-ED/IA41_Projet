@@ -1,6 +1,12 @@
 import numpy as np
 import time
 
+########################################################################
+########################################################################
+########################################################################
+
+# Partie test 
+
 
 # Pour Calculer le temps d'itération
 # average_time = 0
@@ -30,18 +36,33 @@ import time
 #                 [0, 0, 0, 0, 0], 
 #                 [0, 0, 0, 0, 0]]) # Temps total : 0.016867 secondes
 
-# for rows in gameBoard:
-# 	for element in rows:
-# 		print(element)
 
 
-# def show_board():
-# 	print("------------")
-# 	for rows in gameBoard:
-# 		print(rows)
-# 	print("------------")
+# Pour tester de remplir le plateau
+# for x in range(25):
+# 	y = x + 1
+# 	game.place_pawns(y)
+# 	game.show_board()
 
-# show_board()
+
+
+		# # liste des points à check 
+		# self.gameBoard[x][y+1] # à droite 
+		# self.gameBoard[x][y-1] # à gauche
+		# self.gameBoard[x+1][y] # en haut 
+		# self.gameBoard[x-1][y] # en bas
+		# self.gameBoard[x+1][y+1] # en haut à droite 
+		# self.gameBoard[x+1][y-1] # en haut à gauche 
+		# self.gameBoard[x-1][y+1] # en bas à droite 
+		# self.gameBoard[x-1][y-1] # en bas à gauche 
+
+
+
+# Partie test 
+
+########################################################################
+########################################################################
+########################################################################
 
 
 class Game:
@@ -185,8 +206,28 @@ class Game:
 		return False
 
 
-	# def check_win_condition(self):
-	# 	self.gameBoard[x][y]
+
+# Condition de victoire : 
+
+	# Une ligne de 4 pions de la même couleur -> 2 possibilités par lignes donc 10 opérations 
+
+	# Une colonne de 4 pions de la même couleur -> 2 possibilités par colonnes donc 10 opérations 
+
+	# Un carré de 4 pions de la même couleur -> 16 possibilités 
+
+	# Une diagonale de 4 pions de la même couleur -> 8 possibilités 
+
+	# Total : 10 + 10 + 16 + 8 = 44 conditions de victoires par tour 
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	# Vérifier uniquement autour du dernier pion joué
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	def check_win_condition(self):
+		self.gameBoard[x][y]
+
+
+
 
 
 # Faire en sorte de pouvoir choisir la couleurs des pions
@@ -256,21 +297,3 @@ game.show_board()
 
 
 
-
-# Pour tester de remplir le plateau
-# for x in range(25):
-# 	y = x + 1
-# 	game.place_pawns(y)
-# 	game.show_board()
-
-
-
-		# # liste des points à check 
-		# self.gameBoard[x][y+1] # à droite 
-		# self.gameBoard[x][y-1] # à gauche
-		# self.gameBoard[x+1][y] # en haut 
-		# self.gameBoard[x-1][y] # en bas
-		# self.gameBoard[x+1][y+1] # en haut à droite 
-		# self.gameBoard[x+1][y-1] # en haut à gauche 
-		# self.gameBoard[x-1][y+1] # en bas à droite 
-		# self.gameBoard[x-1][y-1] # en bas à gauche 
