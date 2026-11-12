@@ -145,16 +145,19 @@ class Game:
 
 	def move_pawns(self, from_element, to_element, id):
 		if self.check_if_element_is_valid(from_element) and self.check_if_element_is_valid(to_element) :
-			if self.check_pawns_id(from_element, id) :
-				if self.check_if_empty(to_element) :
-					x,y = self.element_to_coordinates(to_element)
-					self.gameBoard[x][y] = id
-					x,y = self.element_to_coordinates(from_element)
-					self.gameBoard[x][y] = 0
+			if self.check_if_move_is_valid(from_element, to_element) :
+				if self.check_pawns_id(from_element, id) :
+					if self.check_if_empty(to_element) :
+						x,y = self.element_to_coordinates(to_element)
+						self.gameBoard[x][y] = id
+						x,y = self.element_to_coordinates(from_element)
+						self.gameBoard[x][y] = 0
+					else :
+						print("Un pion est déjà sur cette case")
 				else :
-					print("Un pion est déjà sur cette case")
+					print("Ce pion ne t'appartiens pas")
 			else :
-				print("Ce pion ne t'appartiens pas")
+				print("Déplacement impossible, seules les cases autour du pion sont autorisées.")
 
 	def check_pawns_id(self, element, id):
 		x,y = self.element_to_coordinates(element)
@@ -162,6 +165,28 @@ class Game:
 			return True
 		else :
 			return False
+
+	def check_if_move_is_valid(self, from_element, to_element):
+		x,y = self.element_to_coordinates(from_element)
+		a,b = self.element_to_coordinates(to_element)
+		
+		# liste des points à check 
+		if ( 
+			x == a and y+1 == b or # à droite 
+			x == a and y-1 == b or # à gauche
+			x+1 == a and y == b or # en haut
+			x-1 == a and y == b or # en bas
+			x+1 == a and y+1 == b or # en haut à droite 
+			x+1 == a and y-1 == b or # en haut à gauche 
+			x-1 == a and y+1 == b or # en bas à droite 
+			x-1 == a and y-1 == b    # en bas à gauche 
+		) :
+			return True
+		return False
+
+
+	# def check_win_condition(self):
+	# 	self.gameBoard[x][y]
 
 
 # Faire en sorte de pouvoir choisir la couleurs des pions
@@ -222,7 +247,9 @@ p2.place_pawns(25)
 
 game.show_board()
 
-p1.move_pawns(16,20)
+p1.move_pawns(16,18)
+p1.move_pawns(16,19)
+p1.move_pawns(16,21)
 game.show_board()
 
 
@@ -235,3 +262,15 @@ game.show_board()
 # 	y = x + 1
 # 	game.place_pawns(y)
 # 	game.show_board()
+
+
+
+		# # liste des points à check 
+		# self.gameBoard[x][y+1] # à droite 
+		# self.gameBoard[x][y-1] # à gauche
+		# self.gameBoard[x+1][y] # en haut 
+		# self.gameBoard[x-1][y] # en bas
+		# self.gameBoard[x+1][y+1] # en haut à droite 
+		# self.gameBoard[x+1][y-1] # en haut à gauche 
+		# self.gameBoard[x-1][y+1] # en bas à droite 
+		# self.gameBoard[x-1][y-1] # en bas à gauche 
