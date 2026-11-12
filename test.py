@@ -48,7 +48,7 @@ class Game:
 	def __init__(self):
 		self.max_number_of_pawns = 8
 		self.actual_number_of_pawns = 0
-		self.number_of_players = 2
+		self.max_number_of_players = 2
 		self.gameBoard = np.array([[0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0], 
@@ -133,15 +133,35 @@ class Game:
 			return False
 
 	def check_if_element_is_valid(self, element) :
-		if (element >= 1 and element <= 25 ):
-			return True
+		if isinstance(element, int):
+			if (element >= 1 and element <= 25 and element ):
+				return True
+			else:
+				print("Element non valide, element entre 1 et 25")
+				return False
 		else:
-			print("Element non valide, element entre 1 et 25")
+			print("Element non valide, element doit être de type int")
 			return False
 
+	def move_pawns(self, from_element, to_element, id):
+		if self.check_if_element_is_valid(from_element) and self.check_if_element_is_valid(to_element) :
+			if self.check_pawns_id(from_element, id) :
+				if self.check_if_empty(to_element) :
+					x,y = self.element_to_coordinates(to_element)
+					self.gameBoard[x][y] = id
+					x,y = self.element_to_coordinates(from_element)
+					self.gameBoard[x][y] = 0
+				else :
+					print("Un pion est déjà sur cette case")
+			else :
+				print("Ce pion ne t'appartiens pas")
 
-		
-
+	def check_pawns_id(self, element, id):
+		x,y = self.element_to_coordinates(element)
+		if self.gameBoard[x][y] == id :
+			return True
+		else :
+			return False
 
 
 # Faire en sorte de pouvoir choisir la couleurs des pions
@@ -165,6 +185,9 @@ class Player:
 				self.number_of_pawns-=1
 		else:
 			print("Plus de jeton à placer")		
+
+	def move_pawns(self, from_element, to_element):
+		game.move_pawns(from_element, to_element, self.id)
 
 
 	# __str__ is a special method that controls what is returned when the object is printed
@@ -190,13 +213,16 @@ p2.place_pawns(21)
 p2.place_pawns(22)
 p2.place_pawns(23)
 p2.place_pawns(212)
-p2.place_pawns(220)
+p2.place_pawns("")
 game.show_board()
 p2.place_pawns(15)
 p2.place_pawns(24)
 p2.place_pawns(25)
 
 
+game.show_board()
+
+p1.move_pawns(16,20)
 game.show_board()
 
 
