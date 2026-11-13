@@ -223,8 +223,63 @@ class Game:
 	# Vérifier uniquement autour du dernier pion joué
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	def check_win_condition(self):
+	def check_win_condition(self, to_element):
+		x,y = self.element_to_coordinates(to_element)
 		self.gameBoard[x][y]
+
+		self.return_element_from_coordinates(x,0) != 0 
+		self.return_element_from_coordinates(x,0) != 0 
+
+	def check_in_a_row_win_condition(self, x) :
+		unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
+		index = np.where(counts == 4)[0]
+		counter = 0
+		lastValue = 0
+		if index.size > 0 and unique_elements[index[0]] != 0 :
+			for i in range(5) :
+				if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
+					counter+=1
+					if i == 0 :
+						lastValue = self.gameBoard[x][i]
+					if lastValue != 0 :
+						if lastValue != self.gameBoard[x][i] :
+							counter = 0
+					if counter == 4 :
+						return True
+				else :
+					counter = 0
+		return False
+
+
+
+# def check_in_a_column_win_condition(self, x) :
+# 		row = np.empty(5)
+
+# 		row[0] = self.return_element_from_coordinates(x,0) 
+# 		row[1] = self.return_element_from_coordinates(x,1) 
+# 		row[2] = self.return_element_from_coordinates(x,2) 
+
+# 		if row[0] == row[1] and row[0] == 0 : 
+# 			return False
+		
+# 		if row[0] != row[1] and row[1] != row[2] :
+# 			return False
+
+# 		row[3] = self.return_element_from_coordinates(x,3) 
+# 		row[4] = self.return_element_from_coordinates(x,4) 
+
+# 		# rows contient tous les pions
+# 		# Donc regarder si une valeur différente de 0 est présent 4 fois
+
+# 		unique_elements, counts = np.unique(row, return_counts=True)
+
+
+
+
+
+
+	def return_element_from_coordinates(self, x, y) :
+		return self.gameBoard[x][y]
 
 
 
@@ -266,10 +321,10 @@ game.show_board()
 
 p1 = Player()
 # print(p1.id)
-p1.place_pawns(5)
-p1.place_pawns(10)
-p1.place_pawns(13)
-p1.place_pawns(15)
+p1.place_pawns(1)
+p1.place_pawns(2)
+p1.place_pawns(3)
+p1.place_pawns(4)
 p1.place_pawns(16)
 
 
@@ -281,7 +336,7 @@ p2.place_pawns(23)
 p2.place_pawns(212)
 p2.place_pawns("")
 game.show_board()
-p2.place_pawns(15)
+p2.place_pawns(25)
 p2.place_pawns(24)
 p2.place_pawns(25)
 
@@ -292,7 +347,11 @@ p1.move_pawns(16,18)
 p1.move_pawns(16,19)
 p1.move_pawns(16,21)
 game.show_board()
-
+print(game.check_in_a_row_win_condition(0))
+print(game.check_in_a_row_win_condition(1))
+print(game.check_in_a_row_win_condition(2))
+print(game.check_in_a_row_win_condition(3))
+print(game.check_in_a_row_win_condition(4))
 
 
 
