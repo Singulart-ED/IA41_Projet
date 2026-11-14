@@ -280,26 +280,31 @@ class Game:
 					counter = 0
 		return False
 
-	# def check_in_a_column_win_condition(self, x) :
-	# 	unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
-	# 	index = np.where(counts == 4)[0]
-	# 	counter = 0
-	# 	lastValue = 0
-	# 	if index.size > 0 and unique_elements[index[0]] != 0 :
-	# 		for i in range(5) :
-	# 			if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
-	# 				counter+=1
-	# 				if i == 0 :
-	# 					lastValue = self.gameBoard[x][i]
-	# 				if lastValue != 0 :
-	# 					if lastValue != self.gameBoard[x][i] :
-	# 						counter = 0
-	# 				if counter == 4 :
-	# 					return True
-	# 			else :
-	# 				counter = 0
-	# 	return False
-
+	def check_in_a_column_win_condition(self, y) :
+		column =  np.array([0, 0, 0, 0, 0])
+		for i in range(5):
+			column[i] = self.gameBoard[i][y]
+		# print(column)
+		unique_elements, counts = np.unique(column, return_counts=True)
+		index = np.where(counts == 4)[0]
+		counter = 0
+		lastValue = 0
+		if index.size > 0 and unique_elements[index[0]] != 0 :
+			for i in range(5) :
+				if column[i] != 0 and column[i]  in unique_elements :
+					if i == 0 :
+						lastValue = column[i] 
+						counter+=1
+					if i != 0 :
+						if lastValue != column[i]  :
+							counter = 0
+						lastValue = column[i] 
+						counter+=1
+					if counter == 4 :
+						return True
+				else :
+					counter = 0
+		return False
 
 # def check_in_a_column_win_condition(self, x) :
 # 		row = np.empty(5)
@@ -359,26 +364,21 @@ game.show_board()
 
 p1 = Player()
 p2 = Player()
-p3 = Player()
 
 
 game.join_game(p1)
 game.join_game(p2)
-game.join_game(p3)
 
-p3.place_pawns(11)
-
-# print(p1.id)
 p1.place_pawns(1)
-p1.place_pawns(2)
-p1.place_pawns(3)
-p1.place_pawns(25)
+p1.place_pawns(6)
+p1.place_pawns(11)
+p1.place_pawns(22)
 
 
-p2.place_pawns(21)
-p2.place_pawns(22)
-p2.place_pawns(24)
-p2.place_pawns(23)
+p2.place_pawns(2)
+p2.place_pawns(7)
+p2.place_pawns(12)
+p2.place_pawns(17)
 
 game.show_board()
 print(game.check_in_a_row_win_condition(0))
@@ -386,5 +386,13 @@ print(game.check_in_a_row_win_condition(1))
 print(game.check_in_a_row_win_condition(2))
 print(game.check_in_a_row_win_condition(3))
 print(game.check_in_a_row_win_condition(4))
+
+game.show_board()
+
+print(game.check_in_a_column_win_condition(0))
+print(game.check_in_a_column_win_condition(1))
+print(game.check_in_a_column_win_condition(2))
+print(game.check_in_a_column_win_condition(3))
+print(game.check_in_a_column_win_condition(4))
 
 game.show_board()
