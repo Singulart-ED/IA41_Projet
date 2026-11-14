@@ -70,11 +70,31 @@ class Game:
 		self.max_number_of_pawns = 8
 		self.actual_number_of_pawns = 0
 		self.max_number_of_players = 2
+		self.number_of_players = 0
+		self.player1 = None
+		self.player1_number_of_pawns_placed = 0
+		self.player2 = None
+		self.player2_number_of_pawns_placed = 0
+		self.max_number_of_pawns_per_player = 4
+
 		self.gameBoard = np.array([[0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0], 
                 [0, 0, 0, 0, 0]])
+
+	def join_game(self, player) :
+		if self.number_of_players < self.max_number_of_players :
+			if self.player1 is None :
+				self.player1 = player
+				self.number_of_players+=1
+			else :
+				self.player2 = player
+				self.number_of_players+=1
+		else :
+			print("Nombre de joueur max atteint")
+
+		
 
 	def element_to_coordinates(self, element) :
 		match element:
@@ -137,14 +157,25 @@ class Game:
 		print("------------")
 
 	def place_pawns(self, element, id):
-		if self.check_if_element_is_valid(element) :
-			if self.actual_number_of_pawns <= self.max_number_of_pawns :
-				if self.check_if_empty(element) :
-					x,y = self.element_to_coordinates(element)
-					self.gameBoard[x][y] = id
-					self.actual_number_of_pawns+=1
+		if self.player1.id == id or self.player2.id == id :
+			if self.check_if_element_is_valid(element) :
+				if self.actual_number_of_pawns < self.max_number_of_pawns :
+					if self.check_if_empty(element) :
+						if self.player1.id == id and self.player1_number_of_pawns_placed < self.max_number_of_pawns_per_player :
+							x,y = self.element_to_coordinates(element)
+							self.gameBoard[x][y] = id
+							self.player1_number_of_pawns_placed+=1
+
+						if self.player2.id == id and self.player2_number_of_pawns_placed < self.max_number_of_pawns_per_player :
+							x,y = self.element_to_coordinates(element)
+							self.gameBoard[x][y] = id
+							self.player2_number_of_pawns_placed+=1
+					else :
+						print("Un pion est déjà sur cette case")
 				else :
-					print("Un pion est déjà sur cette case")
+					print("Nombre de pions max atteint")
+		else :
+			print("Joueur non valide")
 
 	def check_if_empty(self, element):
 		x,y = self.element_to_coordinates(element)
@@ -225,10 +256,7 @@ class Game:
 
 	def check_win_condition(self, to_element):
 		x,y = self.element_to_coordinates(to_element)
-		self.gameBoard[x][y]
-
-		self.return_element_from_coordinates(x,0) != 0 
-		self.return_element_from_coordinates(x,0) != 0 
+		self.check_in_a_row_win_condition(x)
 
 	def check_in_a_row_win_condition(self, x) :
 		unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
@@ -238,18 +266,39 @@ class Game:
 		if index.size > 0 and unique_elements[index[0]] != 0 :
 			for i in range(5) :
 				if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
-					counter+=1
 					if i == 0 :
 						lastValue = self.gameBoard[x][i]
-					if lastValue != 0 :
+						counter+=1
+					if i != 0 :
 						if lastValue != self.gameBoard[x][i] :
 							counter = 0
+						lastValue = self.gameBoard[x][i]
+						counter+=1
 					if counter == 4 :
 						return True
 				else :
 					counter = 0
 		return False
 
+	# def check_in_a_column_win_condition(self, x) :
+	# 	unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
+	# 	index = np.where(counts == 4)[0]
+	# 	counter = 0
+	# 	lastValue = 0
+	# 	if index.size > 0 and unique_elements[index[0]] != 0 :
+	# 		for i in range(5) :
+	# 			if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
+	# 				counter+=1
+	# 				if i == 0 :
+	# 					lastValue = self.gameBoard[x][i]
+	# 				if lastValue != 0 :
+	# 					if lastValue != self.gameBoard[x][i] :
+	# 						counter = 0
+	# 				if counter == 4 :
+	# 					return True
+	# 			else :
+	# 				counter = 0
+	# 	return False
 
 
 # def check_in_a_column_win_condition(self, x) :
@@ -276,8 +325,6 @@ class Game:
 
 
 
-
-
 	def return_element_from_coordinates(self, x, y) :
 		return self.gameBoard[x][y]
 
@@ -291,21 +338,12 @@ class Player:
 	compteur_id = 0  
 
 	def __init__(self):
-		self.number_of_pawns = 4
 		self.color = "black"
 		Player.compteur_id += 1
 		self.id = Player.compteur_id
 
-
-	def move_pawns(self):
-		print("test")
-
 	def place_pawns(self, element):
-		if self.number_of_pawns > 0 :
-			if game.place_pawns(element, self.id) :
-				self.number_of_pawns-=1
-		else:
-			print("Plus de jeton à placer")		
+		game.place_pawns(element, self.id)
 
 	def move_pawns(self, from_element, to_element):
 		game.move_pawns(from_element, to_element, self.id)
@@ -320,32 +358,28 @@ game = Game()
 game.show_board()
 
 p1 = Player()
+p2 = Player()
+p3 = Player()
+
+
+game.join_game(p1)
+game.join_game(p2)
+game.join_game(p3)
+
+p3.place_pawns(11)
+
 # print(p1.id)
 p1.place_pawns(1)
 p1.place_pawns(2)
 p1.place_pawns(3)
-p1.place_pawns(4)
-p1.place_pawns(16)
+p1.place_pawns(25)
 
 
-p2 = Player()
-# print(p2.id)
 p2.place_pawns(21)
 p2.place_pawns(22)
-p2.place_pawns(23)
-p2.place_pawns(212)
-p2.place_pawns("")
-game.show_board()
-p2.place_pawns(25)
 p2.place_pawns(24)
-p2.place_pawns(25)
+p2.place_pawns(23)
 
-
-game.show_board()
-
-p1.move_pawns(16,18)
-p1.move_pawns(16,19)
-p1.move_pawns(16,21)
 game.show_board()
 print(game.check_in_a_row_win_condition(0))
 print(game.check_in_a_row_win_condition(1))
@@ -353,6 +387,4 @@ print(game.check_in_a_row_win_condition(2))
 print(game.check_in_a_row_win_condition(3))
 print(game.check_in_a_row_win_condition(4))
 
-
-
-
+game.show_board()
