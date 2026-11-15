@@ -340,16 +340,13 @@ class Game:
 	def check_in_diagonal_win_condition(self, x, y) :
 		diagonal1 =  np.array([], dtype='int16')
 		diagonal2 =  np.array([], dtype='int16')
-
 		xDiag1 = x
 		yDiag1 = y
-
 		while True:
 			if xDiag1 == 0 or yDiag1 == 0 :
 				break
 			xDiag1-=1
 			yDiag1-=1
-
 		for _ in range(5):
 			diagonal1 = np.append(diagonal1, self.gameBoard[xDiag1][yDiag1])
 			xDiag1+=1
@@ -359,13 +356,11 @@ class Game:
 
 		xDiag2 = x
 		yDiag2 = y
-
 		while True:
 			if xDiag2 == 4 or yDiag2 == 0 :
 				break
 			xDiag2+=1
 			yDiag2-=1
-
 		for _ in range(5):
 			diagonal2 = np.append(diagonal2, self.gameBoard[xDiag2][yDiag2])
 			xDiag2-=1
@@ -373,33 +368,40 @@ class Game:
 			if xDiag2 == -1 or yDiag2 == 5 :
 				break
 
-		print(diagonal1)
-		print(diagonal2)
+		# print(diagonal1)
+		# print(diagonal2)
 
+		for y in range(2) :
+			if y == 0 :
+				diagonals = diagonal1
+			else :
+				diagonals = diagonal2
+			print(f"y : {y}, array : {diagonals}")
 
-		# for i in range(5):
-		# 	column[i] = self.gameBoard[i][y]
-		# # print(column)
-		# unique_elements, counts = np.unique(column, return_counts=True)
-		# index = np.where(counts == 4)[0]
-		# counter = 0
-		# lastValue = 0
-		# if index.size > 0 and unique_elements[index[0]] != 0 :
-		# 	for i in range(5) :
-		# 		if column[i] != 0 and column[i]  in unique_elements :
-		# 			if i == 0 :
-		# 				lastValue = column[i] 
-		# 				counter+=1
-		# 			if i != 0 :
-		# 				if lastValue != column[i]  :
-		# 					counter = 0
-		# 				lastValue = column[i] 
-		# 				counter+=1
-		# 			if counter == 4 :
-		# 				return True
-		# 		else :
-		# 			counter = 0
-		# return False
+			if np.size(diagonals) < 4 :
+				continue
+
+			unique_elements, counts = np.unique(diagonals, return_counts=True)
+			index = np.where(counts == 4)[0]
+			counter = 0
+			lastValue = 0
+			if index.size > 0 and unique_elements[index[0]] != 0 :
+				for i in range(5) :
+					if diagonals[i] != 0 and diagonals[i]  in unique_elements :
+						if i == 0 :
+							lastValue = diagonals[i] 
+							counter+=1
+						if i != 0 :
+							if lastValue != diagonals[i]  :
+								counter = 0
+							lastValue = diagonals[i] 
+							counter+=1
+						if counter == 4 :
+							return True
+					else :
+						counter = 0
+		return False
+		
 
 
 
@@ -444,9 +446,9 @@ game.join_game(p1)
 game.join_game(p2)
 
 p1.place_pawns(1)
-p1.place_pawns(6)
-p1.place_pawns(11)
-p1.place_pawns(22)
+p1.place_pawns(7)
+p1.place_pawns(13)
+p1.place_pawns(19)
 
 
 p2.place_pawns(2)
@@ -473,5 +475,6 @@ game.show_board()
 
 print(game.check_in_diagonal_win_condition(2,2))
 print(game.check_in_diagonal_win_condition(4,4))
+print(game.check_in_diagonal_win_condition(1,0))
 
 game.show_board()
