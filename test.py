@@ -58,6 +58,28 @@ import time
 
 
 
+
+# def check_in_a_column_win_condition(self, x) :
+# 		row = np.empty(5)
+
+# 		row[0] = self.return_element_from_coordinates(x,0) 
+# 		row[1] = self.return_element_from_coordinates(x,1) 
+# 		row[2] = self.return_element_from_coordinates(x,2) 
+
+# 		if row[0] == row[1] and row[0] == 0 : 
+# 			return False
+		
+# 		if row[0] != row[1] and row[1] != row[2] :
+# 			return False
+
+# 		row[3] = self.return_element_from_coordinates(x,3) 
+# 		row[4] = self.return_element_from_coordinates(x,4) 
+
+# 		# rows contient tous les pions
+# 		# Donc regarder si une valeur différente de 0 est présent 4 fois
+
+# 		unique_elements, counts = np.unique(row, return_counts=True)
+
 # Partie test 
 
 ########################################################################
@@ -240,9 +262,9 @@ class Game:
 
 # Condition de victoire : 
 
-	# Une ligne de 4 pions de la même couleur -> 2 possibilités par lignes donc 10 opérations 
+	# Une ligne de 4 pions de la même couleur -> 2 possibilités par lignes donc 10 opérations OK
 
-	# Une colonne de 4 pions de la même couleur -> 2 possibilités par colonnes donc 10 opérations 
+	# Une colonne de 4 pions de la même couleur -> 2 possibilités par colonnes donc 10 opérations OK 
 
 	# Un carré de 4 pions de la même couleur -> 16 possibilités 
 
@@ -284,7 +306,6 @@ class Game:
 		column =  np.array([0, 0, 0, 0, 0])
 		for i in range(5):
 			column[i] = self.gameBoard[i][y]
-		# print(column)
 		unique_elements, counts = np.unique(column, return_counts=True)
 		index = np.where(counts == 4)[0]
 		counter = 0
@@ -306,26 +327,79 @@ class Game:
 					counter = 0
 		return False
 
-# def check_in_a_column_win_condition(self, x) :
-# 		row = np.empty(5)
 
-# 		row[0] = self.return_element_from_coordinates(x,0) 
-# 		row[1] = self.return_element_from_coordinates(x,1) 
-# 		row[2] = self.return_element_from_coordinates(x,2) 
+		# # Pour une diagonale 
+		# # Si x ou y == 0 ou 4 on stop
+		# x+1 y-1
+		# x-1 y+1
+		# # Pour l'autre diagonale
+		# # Si x ou y == 0 ou 4 on stop
+		# x+1 y+1
+		# x-1 y-1
 
-# 		if row[0] == row[1] and row[0] == 0 : 
-# 			return False
-		
-# 		if row[0] != row[1] and row[1] != row[2] :
-# 			return False
+	def check_in_diagonal_win_condition(self, x, y) :
+		diagonal1 =  np.array([], dtype='int16')
+		diagonal2 =  np.array([], dtype='int16')
 
-# 		row[3] = self.return_element_from_coordinates(x,3) 
-# 		row[4] = self.return_element_from_coordinates(x,4) 
+		xDiag1 = x
+		yDiag1 = y
 
-# 		# rows contient tous les pions
-# 		# Donc regarder si une valeur différente de 0 est présent 4 fois
+		while True:
+			if xDiag1 == 0 or yDiag1 == 0 :
+				break
+			xDiag1-=1
+			yDiag1-=1
 
-# 		unique_elements, counts = np.unique(row, return_counts=True)
+		for _ in range(5):
+			diagonal1 = np.append(diagonal1, self.gameBoard[xDiag1][yDiag1])
+			xDiag1+=1
+			yDiag1+=1
+			if xDiag1 == 5 or yDiag1 == 5 :
+				break
+
+		xDiag2 = x
+		yDiag2 = y
+
+		while True:
+			if xDiag2 == 4 or yDiag2 == 0 :
+				break
+			xDiag2+=1
+			yDiag2-=1
+
+		for _ in range(5):
+			diagonal2 = np.append(diagonal2, self.gameBoard[xDiag2][yDiag2])
+			xDiag2-=1
+			yDiag2+=1
+			if xDiag2 == -1 or yDiag2 == 5 :
+				break
+
+		print(diagonal1)
+		print(diagonal2)
+
+
+		# for i in range(5):
+		# 	column[i] = self.gameBoard[i][y]
+		# # print(column)
+		# unique_elements, counts = np.unique(column, return_counts=True)
+		# index = np.where(counts == 4)[0]
+		# counter = 0
+		# lastValue = 0
+		# if index.size > 0 and unique_elements[index[0]] != 0 :
+		# 	for i in range(5) :
+		# 		if column[i] != 0 and column[i]  in unique_elements :
+		# 			if i == 0 :
+		# 				lastValue = column[i] 
+		# 				counter+=1
+		# 			if i != 0 :
+		# 				if lastValue != column[i]  :
+		# 					counter = 0
+		# 				lastValue = column[i] 
+		# 				counter+=1
+		# 			if counter == 4 :
+		# 				return True
+		# 		else :
+		# 			counter = 0
+		# return False
 
 
 
@@ -394,5 +468,10 @@ print(game.check_in_a_column_win_condition(1))
 print(game.check_in_a_column_win_condition(2))
 print(game.check_in_a_column_win_condition(3))
 print(game.check_in_a_column_win_condition(4))
+
+game.show_board()
+
+print(game.check_in_diagonal_win_condition(2,2))
+print(game.check_in_diagonal_win_condition(4,4))
 
 game.show_board()
