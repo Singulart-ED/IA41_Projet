@@ -402,27 +402,79 @@ class Game:
 		
 
 
-	def check_in_square_win_condition(self, x) :
-		# unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
-		# index = np.where(counts == 4)[0]
-		# counter = 0
-		# lastValue = 0
-		# if index.size > 0 and unique_elements[index[0]] != 0 :
-		# 	for i in range(5) :
-		# 		if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
-		# 			if i == 0 :
-		# 				lastValue = self.gameBoard[x][i]
-		# 				counter+=1
-		# 			if i != 0 :
-		# 				if lastValue != self.gameBoard[x][i] :
-		# 					counter = 0
-		# 				lastValue = self.gameBoard[x][i]
-		# 				counter+=1
-		# 			if counter == 4 :
-		# 				return True
-		# 		else :
-		# 			counter = 0
-		# return False
+	def check_in_square_win_condition(self, x, y) :
+
+		square1 =  np.array([], dtype='int16')
+		square2 =  np.array([], dtype='int16')
+		square3 =  np.array([], dtype='int16')
+		square4 =  np.array([], dtype='int16')
+
+		# print(f"x : {x}, y : {y}")
+		
+		# Square 1
+		# x y
+		# x y+1
+		# x-1 y+1
+		# x-1 y
+		square1 = np.append(square1, self.gameBoard[x][y])
+		if x-1 >= 0 and y+1 <= 4 :
+			square1 = np.append(square1, self.gameBoard[x][y+1])
+			square1 = np.append(square1, self.gameBoard[x-1][y+1])
+			square1 = np.append(square1, self.gameBoard[x-1][y])
+
+		# Square 2
+		# x y
+		# x-1 y
+		# x-1 y-1
+		# x y-1
+		square2 = np.append(square2, self.gameBoard[x][y])
+		if x-1 >= 0 and y-1 >= 0 :
+			square2 = np.append(square2, self.gameBoard[x-1][y])
+			square2 = np.append(square2, self.gameBoard[x-1][y-1])
+			square2 = np.append(square2, self.gameBoard[x][y-1])
+
+		# Square 3
+		# x y
+		# x y-1
+		# x+1 y-1
+		# x+1 y
+		square3 = np.append(square3, self.gameBoard[x][y])
+		if x+1 <= 4 and y-1 >= 0 :
+			square3 = np.append(square3, self.gameBoard[x][y-1])
+			square3 = np.append(square3, self.gameBoard[x+1][y-1])
+			square3 = np.append(square3, self.gameBoard[x+1][y])
+
+		# Square 4
+		# x y
+		# x+1 y
+		# x+1 y+1
+		# x y+1
+		square4 = np.append(square4, self.gameBoard[x][y])
+		if x+1 <= 4 and y+1 <= 4 :
+			square4 = np.append(square4, self.gameBoard[x+1][y])
+			square4 = np.append(square4, self.gameBoard[x+1][y+1])
+			square4 = np.append(square4, self.gameBoard[x][y+1])
+
+
+
+		for y in range(4) :
+			if y == 0 :
+				squares = square1
+			elif y == 1 :
+				squares = square2
+			elif y == 2 :
+				squares = square3
+			else :
+				squares = square4
+
+			if np.size(squares) < 4 :
+				continue
+
+			unique_elements, counts = np.unique(squares, return_counts=True)
+			index = np.where(counts == 4)[0]
+			if index.size > 0 and unique_elements[index[0]] != 0 :
+				return True
+		return False
 
 
 
@@ -466,35 +518,19 @@ game.join_game(p1)
 game.join_game(p2)
 
 p1.place_pawns(1)
+p1.place_pawns(2)
+p1.place_pawns(6)
 p1.place_pawns(7)
-p1.place_pawns(13)
-p1.place_pawns(19)
 
 
-p2.place_pawns(4)
-p2.place_pawns(8)
+p2.place_pawns(11)
 p2.place_pawns(12)
 p2.place_pawns(16)
+p2.place_pawns(17)
 
-game.show_board()
 print(game.check_in_a_row_win_condition(0))
 print(game.check_in_a_row_win_condition(1))
 print(game.check_in_a_row_win_condition(2))
 print(game.check_in_a_row_win_condition(3))
 print(game.check_in_a_row_win_condition(4))
-
-game.show_board()
-
-print(game.check_in_a_column_win_condition(0))
-print(game.check_in_a_column_win_condition(1))
-print(game.check_in_a_column_win_condition(2))
-print(game.check_in_a_column_win_condition(3))
-print(game.check_in_a_column_win_condition(4))
-
-game.show_board()
-
-print(game.check_in_diagonal_win_condition(2,2))
-print(game.check_in_diagonal_win_condition(1,2))
-# print(game.check_in_diagonal_win_condition(1,0))
-
 game.show_board()
