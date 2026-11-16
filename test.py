@@ -80,6 +80,18 @@ import time
 
 # 		unique_elements, counts = np.unique(row, return_counts=True)
 
+
+# # Pour une diagonale 
+# # Si x ou y == 0 ou 4 on stop
+# x+1 y-1
+# x-1 y+1
+# # Pour l'autre diagonale
+# # Si x ou y == 0 ou 4 on stop
+# x+1 y+1
+# x-1 y-1
+
+
+
 # Partie test 
 
 ########################################################################
@@ -268,7 +280,7 @@ class Game:
 
 	# Un carré de 4 pions de la même couleur -> 16 possibilités 
 
-	# Une diagonale de 4 pions de la même couleur -> 8 possibilités 
+	# Une diagonale de 4 pions de la même couleur -> 8 possibilités  OK
 
 	# Total : 10 + 10 + 16 + 8 = 44 conditions de victoires par tour 
 
@@ -327,16 +339,6 @@ class Game:
 					counter = 0
 		return False
 
-
-		# # Pour une diagonale 
-		# # Si x ou y == 0 ou 4 on stop
-		# x+1 y-1
-		# x-1 y+1
-		# # Pour l'autre diagonale
-		# # Si x ou y == 0 ou 4 on stop
-		# x+1 y+1
-		# x-1 y-1
-
 	def check_in_diagonal_win_condition(self, x, y) :
 		diagonal1 =  np.array([], dtype='int16')
 		diagonal2 =  np.array([], dtype='int16')
@@ -368,15 +370,11 @@ class Game:
 			if xDiag2 == -1 or yDiag2 == 5 :
 				break
 
-		# print(diagonal1)
-		# print(diagonal2)
-
 		for y in range(2) :
 			if y == 0 :
 				diagonals = diagonal1
 			else :
 				diagonals = diagonal2
-			print(f"y : {y}, array : {diagonals}")
 
 			if np.size(diagonals) < 4 :
 				continue
@@ -403,6 +401,28 @@ class Game:
 		return False
 		
 
+
+	def check_in_square_win_condition(self, x) :
+		# unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
+		# index = np.where(counts == 4)[0]
+		# counter = 0
+		# lastValue = 0
+		# if index.size > 0 and unique_elements[index[0]] != 0 :
+		# 	for i in range(5) :
+		# 		if self.gameBoard[x][i] != 0 and self.gameBoard[x][i] in unique_elements :
+		# 			if i == 0 :
+		# 				lastValue = self.gameBoard[x][i]
+		# 				counter+=1
+		# 			if i != 0 :
+		# 				if lastValue != self.gameBoard[x][i] :
+		# 					counter = 0
+		# 				lastValue = self.gameBoard[x][i]
+		# 				counter+=1
+		# 			if counter == 4 :
+		# 				return True
+		# 		else :
+		# 			counter = 0
+		# return False
 
 
 
@@ -451,10 +471,10 @@ p1.place_pawns(13)
 p1.place_pawns(19)
 
 
-p2.place_pawns(2)
-p2.place_pawns(7)
+p2.place_pawns(4)
+p2.place_pawns(8)
 p2.place_pawns(12)
-p2.place_pawns(17)
+p2.place_pawns(16)
 
 game.show_board()
 print(game.check_in_a_row_win_condition(0))
@@ -474,7 +494,7 @@ print(game.check_in_a_column_win_condition(4))
 game.show_board()
 
 print(game.check_in_diagonal_win_condition(2,2))
-print(game.check_in_diagonal_win_condition(4,4))
-print(game.check_in_diagonal_win_condition(1,0))
+print(game.check_in_diagonal_win_condition(1,2))
+# print(game.check_in_diagonal_win_condition(1,0))
 
 game.show_board()
