@@ -58,29 +58,6 @@ import time
 
 
 
-
-# def check_in_a_column_win_condition(self, x) :
-# 		row = np.empty(5)
-
-# 		row[0] = self.return_element_from_coordinates(x,0) 
-# 		row[1] = self.return_element_from_coordinates(x,1) 
-# 		row[2] = self.return_element_from_coordinates(x,2) 
-
-# 		if row[0] == row[1] and row[0] == 0 : 
-# 			return False
-		
-# 		if row[0] != row[1] and row[1] != row[2] :
-# 			return False
-
-# 		row[3] = self.return_element_from_coordinates(x,3) 
-# 		row[4] = self.return_element_from_coordinates(x,4) 
-
-# 		# rows contient tous les pions
-# 		# Donc regarder si une valeur différente de 0 est présent 4 fois
-
-# 		unique_elements, counts = np.unique(row, return_counts=True)
-
-
 # # Pour une diagonale 
 # # Si x ou y == 0 ou 4 on stop
 # x+1 y-1
@@ -127,6 +104,30 @@ class Game:
 				self.number_of_players+=1
 		else :
 			print("Nombre de joueur max atteint")
+
+	def start(self) :
+		if self.player1 is not None and self.player2 is not None :
+			while self.check_win_condition is False :
+				return True
+
+				# Faire un system pour choisir sa couleur 
+				# Faire un system de tour par tour
+					# Joueur avec les pions noirs commence
+					# Faire placer les 4 pions de chaque joueur
+						# Demander à chaque joueur de placer un pion
+					# Faire déplacer les pions jusqu'à la victoire
+						# Demander à chaque joueur de placer un pion
+				
+		else :
+			print("Il faut 2 joueurs pour lancer la partie")	 
+
+
+	def ask_player_emplacement(self) :
+
+		while True:
+			userInput = input()
+			if self.check_if_element_is_valid(int(userInput)) :
+				break
 
 		
 
@@ -271,26 +272,19 @@ class Game:
 		return False
 
 
-
-# Condition de victoire : 
-
-	# Une ligne de 4 pions de la même couleur -> 2 possibilités par lignes donc 10 opérations OK
-
-	# Une colonne de 4 pions de la même couleur -> 2 possibilités par colonnes donc 10 opérations OK 
-
-	# Un carré de 4 pions de la même couleur -> 16 possibilités 
-
-	# Une diagonale de 4 pions de la même couleur -> 8 possibilités  OK
-
-	# Total : 10 + 10 + 16 + 8 = 44 conditions de victoires par tour 
-
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	# Vérifier uniquement autour du dernier pion joué
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	def check_win_condition(self, to_element):
 		x,y = self.element_to_coordinates(to_element)
-		self.check_in_a_row_win_condition(x)
+		return (
+			self.check_in_a_row_win_condition(x) or
+			self.check_in_a_column_win_condition(y) or
+			self.check_in_diagonal_win_condition(x,y) or
+			self.check_in_square_win_condition(x,y)
+		)
+
 
 	def check_in_a_row_win_condition(self, x) :
 		unique_elements, counts = np.unique(self.gameBoard[x], return_counts=True)
@@ -517,6 +511,7 @@ p2 = Player()
 game.join_game(p1)
 game.join_game(p2)
 
+
 p1.place_pawns(1)
 p1.place_pawns(2)
 p1.place_pawns(6)
@@ -528,9 +523,11 @@ p2.place_pawns(12)
 p2.place_pawns(16)
 p2.place_pawns(17)
 
-print(game.check_in_a_row_win_condition(0))
-print(game.check_in_a_row_win_condition(1))
-print(game.check_in_a_row_win_condition(2))
-print(game.check_in_a_row_win_condition(3))
-print(game.check_in_a_row_win_condition(4))
+# print(game.check_win_condition(0) #bug
+print(game.check_win_condition(1))
+print(game.check_win_condition(25))
+print(game.check_win_condition(21))
+print(game.check_win_condition(16))
 game.show_board()
+
+game.ask_player_emplacement()
